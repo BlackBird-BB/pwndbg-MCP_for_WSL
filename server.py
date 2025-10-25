@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 AI Agent (Claude)
     ↕ JSON-RPC over stdio
@@ -19,7 +18,7 @@ from pathlib import Path
 from mcp.server.fastmcp import FastMCP
 
 # MCP Server configuration
-mcp = FastMCP("pwndbg-mcp-server", log_level="INFO")
+mcp = FastMCP("pwndbg-mcp-server", log_level="ERROR")
 
 # Global GDB session variables
 gdb_process = None
@@ -175,9 +174,10 @@ def check_pwndbg_connection() -> str:
             return "Error: GDB is not installed"
 
         pwndbg_paths = [
-            Path.home() / ".gdbinit",
-            Path("/usr/share/pwndbg"),
+            # Path.home() / ".gdbinit",
+            # Path("/usr/share/pwndbg"),
             Path.home() / "pwndbg",
+            "/usr/bin/pwndbg",
         ]
 
         pwndbg_found = any(path.exists() for path in pwndbg_paths)
@@ -205,7 +205,7 @@ def start_debug_session(binary_path: str = "") -> str:
         return f"Error: Binary file not found: {binary_path}"
 
     try:
-        gdb_cmd = ["gdb", "-q"]
+        gdb_cmd = ["pwndbg", "-q"]
 
         if binary_path:
             gdb_cmd.append(binary_path)
